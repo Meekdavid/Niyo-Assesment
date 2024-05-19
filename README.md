@@ -1,6 +1,6 @@
 # School Management API Documentation
 
-This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures. The API is written with C#.
+This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures. The API is written with C#, and for the database with SQL(T-SQL).
 
 ## Summary
 
