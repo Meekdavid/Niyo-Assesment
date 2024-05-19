@@ -1,31 +1,18 @@
-# Program Registration API
+# School Management API Documentation
 
-The **Program Registration API** is a .NET Core project designed to simplify program management and registration. It offers CRUD operations, integrates with Azure Cosmos DB, and provides flexibility for application templates and workflow stages. Built with .NET 8.0, it ensures efficiency and scalability.
+This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures.
+
+## Summary
+
+The **School Management API** is designed to meet up the requirements of the assesment. This project employs **WebSockets** to facilitate real-time communication between clients and the server, ensuring that updates and notifications are delivered instantly. The WebSocket URL for this API is `https://localhost:7299/index.html`.
 
 ### Key Features
 
-- **Effortless Registration:** Simplify the registration process for participants.
-- **Program Management:** Easily create, update, and manage various programs, program details, or application forms.
-- **Secure Data Handling:** Ensures input data are validated against XML and SQL injection attacks.
-- **Customizable Forms:** Ensures forms and program details are customizable.
-- **Documentation:** Incorporates Swagger UI endpoints documentation for easy accessibility.
-- **Integration Capabilities:** Seamlessly integrate with other systems and databases.
-
-## Contents
-
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Endpoints](#endpoints)
-  - [ProgramController](#programcontroller)
-    - [CreateQuestion](#createquestion)
-    - [UpdateQuestion](#updatequestion)
-  - [CandidateApplicationController](#candidateapplicationcontroller)
-    - [GetQuestions](#getquestions)
-    - [SubmitApplication](#submitapplication)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
+- **User Authentication and Registration:** Secure user registration and login processes with JWT token-based authentication to protect access to the system.
+- **Course Management:** Comprehensive CRUD operations for managing courses, including creating, updating, retrieving, and deleting course information.
+- **Student Management:** Efficiently handle student data with endpoints for creating, retrieving, updating, and deleting student records.
+- **Real-Time Updates:** Leveraging WebSockets to provide immediate updates and notifications to users, ensuring they are always informed of the latest changes.
+- **Input Validation:** Input validations are implemented to guard against XML, XSS and SQL injection attacks.
 
 ## Getting Started
 
@@ -37,15 +24,13 @@ Before you begin, ensure you have met the following requirements:
 
 ### Installation
 
-#### You can use Shell CLI or Visual Studio GUI
-
 1. Clone this repository:
    ```shell
-   git clone https://github.com/Meekdavid/APIAccessPro.git
+   git clone https://github.com/Meekdavid/Niyo-Assesment
    ```
 2. Navigate to the Project Directory:
    ```shell
-   cd APIAccessPro
+   cd Niyo-Assesment
    ```
 3. Restore Dependencies:
    ```shell
@@ -55,19 +40,11 @@ Before you begin, ensure you have met the following requirements:
    ```shell
    dotnet build
    ```
-
-## Usage
-
-To run the API locally, use the following command:
-```shell
-dotnet run
-```
-The API will be available at http://localhost:5000 (HTTP) and https://localhost:5001 (HTTPS) by default. Refer to the swagger API documentation for details on available endpoints and usage.
-**https://41.203.112.130/APIAccessPro/swagger/index.html**
-
-# School Management API Documentation
-
-This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures.
+5. Run the API locally:
+   ```shell
+   dotnet run
+   ```
+   The API will be available at `http://localhost:5085/swagger/index.html` (HTTP) and `https://localhost:7299/swagger/index.html` (HTTPS) by default. Alternatively, load the project/solution on visual studio and run.
 
 ## Authentication Controller
 
@@ -76,6 +53,7 @@ This document provides an overview of the endpoints available in the School Mana
 Endpoint: `POST /api/Authentication/Register`
 
 Register a new user in the system.
+TypeId 1 for admin, 2 for teacher and 3 for steudent.
 
 #### Request Payload
 
@@ -169,7 +147,14 @@ Retrieve all courses available in the system.
 ```json
 [
   {
-    "CourseDetails": "string"
+    "Id": 0,
+    "Title": "string",
+    "Description": "string",
+    "Credits": "string",
+    "Instructor": "string",
+    "Department": "string",
+    "StartDate": "string",
+    "EndDate": "string"
   }
 ]
 ```
@@ -184,7 +169,14 @@ Retrieve a course by its unique ID.
 
 ```json
 {
-  "CourseDetails": "string"
+  "Id": 0,
+  "Title": "string",
+  "Description": "string",
+  "Credits": "string",
+  "Instructor": "string",
+  "Department": "string",
+  "StartDate": "string",
+  "EndDate": "string"
 }
 ```
 
@@ -275,7 +267,15 @@ Retrieve all students registered in the system.
 ```json
 [
   {
-    "StudentDetails": "string"
+    "Id": "string",
+    "FirstName": "string",
+    "LastName": "string",
+    "DateOfBirth": "string",
+    "Email": "string",
+    "PhoneNumber": "string",
+    "Address": "string",
+    "EnrollmentDate": "string",
+    "GPA": "string"
   }
 ]
 ```
@@ -290,7 +290,15 @@ Retrieve details of a student by their unique ID.
 
 ```json
 {
-  "StudentDetails": "string"
+  "Id": "string",
+  "FirstName": "string",
+  "LastName": "string",
+  "DateOfBirth": "string",
+  "Email": "string",
+  "PhoneNumber": "string",
+  "Address": "string",
+  "EnrollmentDate": "string",
+  "GPA": "string"
 }
 ```
 
@@ -338,34 +346,3 @@ Delete a student from the system using their unique ID.
   "ResponseMessage": "string"
 }
 ```
-## Deployment
-
-- **Publish API:** Build and publish the API project into a folder on your development machine.
-- **Copy the Published API to the Server:** Transfer the published API folder to your Windows server using methods like FTP, SCP, or shared network drives.
-- **Create an IIS Site:** Open IIS Manager, expand the server node, right-click on "Sites," select "Add Website," configure with a unique name, physical path, binding details, and click "OK" to create the site.
-- **Install the .NET Core Hosting Bundle:** If not already installed, install from [here](https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-aspnetcore-6.0.0-windows-hosting-bundle-installer)
-- **Configure the Application Pool:** In IIS
-
- Manager, access "Application Pools," right-click your site's associated pool, choose "Advanced Settings," and set ".NET CLR Version" to "No Managed Code."
-- **Test the API:** In IIS Manager, choose your site in the left pane, then click "Browse" to test your API in a web browser using the configured URL.
-- **Set Up CosmosDB using an Emulator:** Set up the CosmosDB using an Emulator, details can be found on the appsettings.json file.
-- **Troubleshoot:** In case of issues, check logs for errors and verify all required dependencies and configurations, including database connections and app settings.
-### **N/B:** You can deploy the .NET Core API to various platforms based on your requirements: Azure App Service, AWS Lambda, Docker, Et Cetera.
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to this project, please follow these guidelines:
-- Fork the repository.
-- Create a new branch for your changes.
-- Make your changes and commit them.
-- Create a pull request, explaining the purpose of your changes.
-
-<details>
-  <summary><b>🛠️&nbsp;&nbsp;More&nbsp;About&nbsp;Project</b></summary>
-  
-### Author  
-  * David Mboko | [Youtube](https://www.youtube.com/@davidmboko6502/featured) | [LinkedIn](https://www.linkedin.com/mwlite/in/david-mboko-25bb9019b) | [Academia](https://aksu.academia.edu/DavidMboko) |
-
-### Resources
-- [Click to View](https://dotnet.microsoft.com/en-us/learn)
-</details>
