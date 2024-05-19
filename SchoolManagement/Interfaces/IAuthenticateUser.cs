@@ -9,6 +9,6 @@ namespace SchoolManagement.Interfaces
         Task<AuthenticateUserModel> Authenticate(LoginDTO login);
         Task<string> GenerateJwtToken(AuthUser user);
         Task<string> HashPassword(string password);
-        Task<ClaimsPrincipal> ValidateToken(string token);
+        //Task<ClaimsPrincipal> ValidateToken(string token);
     }
 }

@@ -1,11 +1,37 @@
 {
   "Version": 1,
-  "Hash": "VVbj0fylaeolwckM9deLr4ERcV3/P6Re6HBMmjfY8xQ=",
+  "Hash": "Forh0ECM364tPrGGg3CI6tHI3ncnH/lelqAf82ta0qI=",
   "Source": "SchoolManagement",
   "BasePath": "_content/SchoolManagement",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "SchoolManagement\\wwwroot",
+      "Source": "SchoolManagement",
+      "ContentRoot": "C:\\Users\\David Mboko\\Desktop\\Git\\Niyo-Assesment\\SchoolManagement\\wwwroot\\",
+      "BasePath": "_content/SchoolManagement",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\David Mboko\\Desktop\\Git\\Niyo-Assesment\\SchoolManagement\\wwwroot\\index.html",
+      "SourceId": "SchoolManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\David Mboko\\Desktop\\Git\\Niyo-Assesment\\SchoolManagement\\wwwroot\\",
+      "BasePath": "_content/SchoolManagement",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
 }

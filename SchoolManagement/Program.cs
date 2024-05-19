@@ -17,6 +17,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -90,12 +101,15 @@ builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
 builder.Services.AddScoped<IAuthenticateUser, AuthenticateUser>();
 
 // Add SignalR
-builder.Services.AddSignalR();
+builder.Services.AddSignalR()
+    .AddHubOptions<SchoolHub>(options =>
+    {
+        options.EnableDetailedErrors = true;
+    });
 
-//Add buld time logging
+//Add build time logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-
 
 var app = builder.Build();
 
@@ -116,7 +130,13 @@ app.UseMiddleware<JwtValidationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCors();
+
+// Serve static files from wwwroot
+app.UseStaticFiles();
+
 app.MapControllers();
-app.MapHub<SchoolHub>("/schoolHub");
+//app.MapHub<SchoolHub>("/schoolHub");
+app.MapHub<SchoolHub>("/schoolNotifications");
 
 app.Run();

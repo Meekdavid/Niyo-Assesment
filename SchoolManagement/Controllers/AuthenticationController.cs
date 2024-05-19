@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using SchoolManagement.Helpers.DTOs;
 using SchoolManagement.Helpers.Models;
+using SchoolManagement.Helpers.SignalR;
 using SchoolManagement.Interfaces;
 using System;
 
@@ -18,13 +20,14 @@ namespace SchoolManagement.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IHubContext<SchoolHub> _hubContext;
 
         public AuthenticationController(
             IAuthUserRepository authUserRepository,
             IStudentRepository studentRepository,
             IAuthenticateUser authenticateUser,
             ILogger<AuthenticationController> logger,
-            IConfiguration configuration, IMapper mapper)
+            IConfiguration configuration, IMapper mapper, IHubContext<SchoolHub> hubContext)
         {
             _authUserRepository = authUserRepository;
             _studentRepository = studentRepository;
@@ -32,6 +35,7 @@ namespace SchoolManagement.Controllers
             _logger = logger;
             _configuration = configuration;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         // Endpoint to register a new auth user
@@ -81,17 +85,20 @@ namespace SchoolManagement.Controllers
                         await _studentRepository.AddAsync(student);
                     }
 
+                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", $"{authUser.userName} was created successfully.");
                     _logger.LogInformation("Auth user registered successfully.");
                     return StatusCode(StatusCodes.Status201Created, new BaseResponse { ResponseCode = "00", ResponseMessage = "User created successfully" });
                 }
                 else
                 {
+                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", $"{authUser.userName} was not created successfully.");
                     _logger.LogWarning("Failed to register auth user.");
                     return StatusCode(StatusCodes.Status200OK ,new BaseResponse { ResponseCode = "01", ResponseMessage = "Unable to register user" });
                 }
             }
             catch (Exception ex)
             {
+                await _hubContext.Clients.All.SendAsync("ReceiveMessage", $"{authUser.userName} was not created successfully because an error occured - {ex.Message}");
                 _logger.LogError($"An exception occurred when registering an auth user: {ex}");
                 return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { ResponseCode = "06", ResponseMessage = "An error occurred, please try again" });
             }
@@ -118,17 +125,20 @@ namespace SchoolManagement.Controllers
                     var jwtToken = await _authenticateUser.GenerateJwtToken(authResult.userInfo);
 
                     _logger.LogInformation("Auth user logged in successfully.");
+                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", $"{loginDto.userName} Sucessfuuly Logged in.");
                     return StatusCode(StatusCodes.Status200OK, new LoginResponse { JwtToken = jwtToken, ResponseCode = "00", ResponseMessage = "Login successful" });
                 }
                 else
                 {
                     _logger.LogWarning($"Authentication failed for user: {loginDto.userName}");
+                    await _hubContext.Clients.All.SendAsync($"{loginDto.userName} could not Log in because {authResult.ResponseMessage}.");
                     return StatusCode(StatusCodes.Status200OK ,new BaseResponse { ResponseCode = "01", ResponseMessage = authResult.ResponseMessage });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An exception occurred when logging in an auth user: {ex}");
+                await _hubContext.Clients.All.SendAsync("ReceiveMessage", $"{loginDto.userName} could not Log in because an error occured. - {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { ResponseCode = "06", ResponseMessage = "An error occurred, please try again" });
             }
         }

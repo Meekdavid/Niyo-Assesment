@@ -9,7 +9,7 @@ namespace SchoolManagement.Helpers.DTOs
         [Validate]
         public string Description { get; set; }
         [Validate]
-        public int Credits { get; set; }
+        public string Credits { get; set; }
         [Validate]
         public string Instructor { get; set; }
         [Validate]

@@ -39,22 +39,7 @@ namespace SchoolManagement.Controllers
 
             try
             {
-                var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Token not found in the request header.");
-                    return BadRequest(new BaseResponse { ResponseCode = "01", ResponseMessage = "Token not found" });
-                }
-
-                var principal = _tokenService.ValidateToken(token);
-
-                if (principal == null)
-                {
-                    _logger.LogWarning("Invalid token.");
-                    return BadRequest(new BaseResponse { ResponseCode = "02", ResponseMessage = "Invalid token" });
-                }
-
+                
                 var ran = new Random();
 
                 var studentModel = _mapper.Map<Student>(student);
@@ -89,24 +74,6 @@ namespace SchoolManagement.Controllers
 
             try
             {
-                //First, authenticate the JWT token supplied by the client
-                var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Token not found in the request header.");
-                    return BadRequest(new BaseResponse { ResponseCode = "01", ResponseMessage = "Token not found" });
-                }
-
-                var principal = _tokenService.ValidateToken(token);
-
-                if (principal == null)
-                {
-                    _logger.LogWarning("Invalid token.");
-                    return BadRequest(new BaseResponse { ResponseCode = "02", ResponseMessage = "Invalid token" });
-                }
-
-                //Jwt token is valid, proceed to complete the request
                 var students = await _studentRepository.GetAllAsync();
                 _logger.LogInformation("Students retrieved successfully.");
                 return StatusCode(StatusCodes.Status200OK, new CreateStudentResponse { StudentInfo = students, ResponseCode = "00", ResponseMessage = "Successful Fetch" });
@@ -129,24 +96,6 @@ namespace SchoolManagement.Controllers
 
             try
             {
-                //First, authenticate the JWT token supplied by the client
-                var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Token not found in the request header.");
-                    return BadRequest(new BaseResponse { ResponseCode = "01", ResponseMessage = "Token not found" });
-                }
-
-                var principal = _tokenService.ValidateToken(token);
-
-                if (principal == null)
-                {
-                    _logger.LogWarning("Invalid token.");
-                    return BadRequest(new BaseResponse { ResponseCode = "02", ResponseMessage = "Invalid token" });
-                }
-
-                //Jwt token is valid, proceed to complete the request
                 var student = await _studentRepository.GetByIdAsync(studentId);
                 if (student == null)
                 {
@@ -169,31 +118,14 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [Consumes("application/json")]
         [HttpPut("{studentId}")]
-        public async Task<IActionResult> UpdateStudent(int studentId, [FromBody] StudentDTO student)
+        public async Task<IActionResult> UpdateStudent(string studentId, [FromBody] StudentDTO student)
         {
             _logger.LogInformation($"Request received to update student with ID: {studentId}");
 
             try
             {
-                //First, authenticate the JWT token supplied by the client
-                var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Token not found in the request header.");
-                    return BadRequest(new BaseResponse { ResponseCode = "01", ResponseMessage = "Token not found" });
-                }
-
-                var principal = _tokenService.ValidateToken(token);
-
-                if (principal == null)
-                {
-                    _logger.LogWarning("Invalid token.");
-                    return BadRequest(new BaseResponse { ResponseCode = "02", ResponseMessage = "Invalid token" });
-                }
-
-                //Jwt token is valid, proceed to complete the request
                 var studentModel = _mapper.Map<Student>(student);
+                studentModel.Id = studentId;
 
                 var successful = await _studentRepository.UpdateAsync(studentModel);
 
@@ -226,24 +158,6 @@ namespace SchoolManagement.Controllers
 
             try
             {
-                //First, authenticate the JWT token supplied by the client
-                var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Token not found in the request header.");
-                    return BadRequest(new BaseResponse { ResponseCode = "01", ResponseMessage = "Token not found" });
-                }
-
-                var principal = _tokenService.ValidateToken(token);
-
-                if (principal == null)
-                {
-                    _logger.LogWarning("Invalid token.");
-                    return BadRequest(new BaseResponse { ResponseCode = "02", ResponseMessage = "Invalid token" });
-                }
-
-                //Jwt token is valid, proceed to complete the request
                 var successful = await _studentRepository.DeleteAsync(studentId);
 
                 if (successful)

@@ -87,34 +87,6 @@ namespace SchoolManagement.Repositories
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-
-        public async Task<ClaimsPrincipal> ValidateToken(string token)
-        {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-                var validationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-
-                SecurityToken validatedToken;
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
-
-                return principal;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Token validation failed", ex);
-                return null;
-            }
-        }
+        
     }
 }
