@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SchoolManagement.Helpers.Attributes;
 using SchoolManagement.Helpers.DTOs;
 using SchoolManagement.Helpers.Models;
 using SchoolManagement.Interfaces;
@@ -86,6 +87,7 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("{courseId}")]
+        [ValidatePathParams]
         public async Task<ActionResult<Course>> GetCourse(string courseId)
         {
             _logger.LogInformation($"Request received to get course with ID: {courseId}");
@@ -114,6 +116,7 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [Consumes("application/json")]
         [HttpPut("{courseId}")]
+        [ValidatePathParams]
         public async Task<IActionResult> UpdateCourse(int courseId, [FromBody] CourseDTO course)
         {
             _logger.LogInformation($"Request received to update course with ID: {courseId}");
@@ -147,6 +150,7 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{courseId}")]
+        [ValidatePathParams]
         public async Task<IActionResult> DeleteCourse(string courseId)
         {
             _logger.LogInformation($"Request received to delete course with ID: {courseId}");

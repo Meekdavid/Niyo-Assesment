@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SchoolManagement.Helpers.Attributes;
 using SchoolManagement.Helpers.DTOs;
 using SchoolManagement.Helpers.Models;
 using SchoolManagement.Interfaces;
@@ -90,6 +91,7 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("{studentId}")]
+        [ValidatePathParams]
         public async Task<ActionResult<Student>> GetStudent(string studentId)
         {
             _logger.LogInformation($"Request received to get student with ID: {studentId}");
@@ -118,6 +120,7 @@ namespace SchoolManagement.Controllers
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
         [Consumes("application/json")]
         [HttpPut("{studentId}")]
+        [ValidatePathParams]
         public async Task<IActionResult> UpdateStudent(string studentId, [FromBody] StudentDTO student)
         {
             _logger.LogInformation($"Request received to update student with ID: {studentId}");
