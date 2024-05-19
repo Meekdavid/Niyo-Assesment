@@ -1,10 +1,10 @@
 # School Management API Documentation
 
-This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures.
+This document provides an overview of the endpoints available in the School Management API along with their functionalities and payload structures. The API is written with C#.
 
 ## Summary
 
-The **School Management API** is designed to meet up the requirements of the assesment. This project employs **WebSockets** to facilitate real-time communication between clients and the server, ensuring that updates and notifications are delivered instantly. The WebSocket URL for this API is `https://localhost:7299/index.html`.
+The **School Management API** is designed to meet the requirements of the assessment. This project employs **WebSockets** to facilitate real-time communication between clients and the server, ensuring that updates and notifications are delivered instantly. The WebSocket URL for this API is `https://localhost:7299/index.html`.
 
 ### Key Features
 
@@ -44,7 +44,7 @@ Before you begin, ensure you have met the following requirements:
    ```shell
    dotnet run
    ```
-   The API will be available at `http://localhost:5085/swagger/index.html` (HTTP) and `https://localhost:7299/swagger/index.html` (HTTPS) by default. Alternatively, load the project/solution on visual studio and run.
+   The API will be available at `http://localhost:5085/swagger/index.html` (HTTP) and `https://localhost:7299/swagger/index.html` (HTTPS) by default. Alternatively, load the project/solution on Visual Studio and run.
 
 ## Authentication Controller
 
@@ -53,7 +53,7 @@ Before you begin, ensure you have met the following requirements:
 Endpoint: `POST /api/Authentication/Register`
 
 Register a new user in the system.
-TypeId 1 for admin, 2 for teacher and 3 for steudent.
+For the payload below, TypeId 1 for admin, 2 for teacher and 3 for student.
 
 #### Request Payload
 
