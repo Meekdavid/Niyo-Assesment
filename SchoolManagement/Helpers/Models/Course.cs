@@ -1,7 +1,10 @@
-﻿namespace SchoolManagement.Helpers.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SchoolManagement.Helpers.Models
 {
     public class Course
     {
+        [Key]
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

@@ -5,15 +5,16 @@ using Microsoft.OpenApi.Models;
 using ProgramApi.Helpers.ActionFilters;
 using ProgramApi.Helpers.AutoMapper;
 using SchoolManagement.Helpers.DBContext;
+using SchoolManagement.Helpers.MiddleWares;
 using SchoolManagement.Helpers.SignalR;
 using SchoolManagement.Interfaces;
 using SchoolManagement.Repositories;
+using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 // Configure Swagger
@@ -21,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolManagementApi", Version = "v1" });
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -41,6 +43,7 @@ builder.Services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 //Configure Validation
@@ -59,6 +62,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -77,7 +81,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 //Configure Auto MAPPER
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Register repositories
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -87,6 +91,11 @@ builder.Services.AddScoped<IAuthenticateUser, AuthenticateUser>();
 
 // Add SignalR
 builder.Services.AddSignalR();
+
+//Add buld time logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 
 var app = builder.Build();
 
@@ -100,6 +109,9 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler("/error");
 
 app.UseHttpsRedirection();
+
+// Use the custom JWT validation middleware
+app.UseMiddleware<JwtValidationMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -21,6 +21,6 @@ namespace SchoolManagement.Helpers.DTOs
         [Validate]
         public string EnrollmentDate { get; set; }
         [Validate]
-        public double GPA { get; set; }
+        public string GPA { get; set; }
     }
 }
